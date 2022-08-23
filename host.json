@@ -7,5 +7,13 @@
                 "excludedTypes": "Request"
             }
         }
+    },
+    //https://www.codit.eu/blog/adding-swagger-ui-azure-functions/?country_sel=be
+    "openApi": {
+      "info": {
+        "title": "Content",
+        "description": "API to access umbraco content",
+        "version": "v1"
+      }
     }
 }

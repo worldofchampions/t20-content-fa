@@ -15,7 +15,7 @@ The following application settings have to be set to run the function app
 | PreferredLocations					|  string  | Cosmos DB prefered location   |
 | StorageConnectionString					|  Connection String  | Storage account connection for various tables   |
 | OpenApi__Info__Title 						|  string             | Content									|
-| OpenApi__Info__Description 				|  string             | API to manage Content				|
+| OpenApi__Info__Description 				|  string             | API to Access Umbraco Content				|
 | OpenApi__Info__Version 					|  string             | v1												|
 
 These settings should be set inside `local.settings.json` file when running locally.
@@ -29,12 +29,12 @@ These settings should be set inside `local.settings.json` file when running loca
     "DatabaseName": "cricketdata",
     "CosmosDBConnectionString": "",
     "ContentCollectionName": "content"
-    "PreferredLocations": "UAE North",
+    "PreferredLocations": "North Europe",
 
     "StorageConnectionString": "",
 
     "OpenApi__Info__Title": "Content",
-    "OpenApi__Info__Description": "API to Manage Content",
+    "OpenApi__Info__Description": "API to Access Umbraco Content",
     "OpenApi__Info__Version": "v1",
   }
 }
