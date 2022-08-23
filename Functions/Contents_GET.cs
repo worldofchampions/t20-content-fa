@@ -2,10 +2,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -17,45 +17,30 @@ namespace T20.Content.Functions
     public static class Contents_GET
     {
         [FunctionName("Contents_GET")]
-
         [OpenApiOperation(
             operationId: "Contents_GET",
             tags: new[] { "contents" },
             Visibility = OpenApiVisibilityType.Important)]
         [OpenApiParameter(
-            name: "userId",
+            name: "contentType",
             In = Microsoft.OpenApi.Models.ParameterLocation.Path,
             Type = typeof(string),
-            Description = "user identifier",
-            Summary = "user identifier",
+            Description = "content type",
+            Summary = "content type",
             Required = true,
             Visibility = OpenApiVisibilityType.Important)]
         [OpenApiResponseWithBody(
             statusCode: HttpStatusCode.OK,
-            bodyType: typeof(List<NotificationEnvelope>),
+            bodyType: typeof(List<dynamic>),
             contentType: "application/json",
-            Description = "List of Notification Envelope",
+            Description = "List of Documents",
             Summary = "OK")]
         [OpenApiResponseWithBody(
-            statusCode: HttpStatusCode.BadRequest,
+            statusCode: HttpStatusCode.NoContent,
             bodyType: typeof(ResponseMessage),
             contentType: "application/json",
-            Description = "Bad Request",
+            Description = "No Content",
             Summary = "")]
-        [OpenApiResponseWithBody(
-            statusCode: HttpStatusCode.Forbidden,
-            contentType: "application/json",
-            bodyType: typeof(ResponseMessage),
-            Description = "The Forbidden response")]
-        [OpenApiResponseWithBody(
-            statusCode: HttpStatusCode.Unauthorized,
-            contentType: "application/json",
-            bodyType: typeof(ResponseMessage),
-            Description = "The Unauthorized response")]
-        [OpenApiSecurity("oidc_auth",
-            SecuritySchemeType.OpenIdConnect,
-            OpenIdConnectUrl = "https://fidm.eu1.gigya.com/oidc/op/v1.0/3_BvA3VlTvrwSX1WhYFItrqeg1_mIU796DfEaXSRI4U3CeoUhQeQ_K0N9Zswq5nFeW/.well-known/openid-configuration",
-            OpenIdConnectScopes = "openid,profile,email,phone,address")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "contents/{contentType}")] HttpRequest req,
             string contentType,
