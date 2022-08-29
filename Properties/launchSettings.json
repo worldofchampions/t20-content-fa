@@ -2,7 +2,6 @@
   "profiles": {
     "t20_content_fa": {
       "commandName": "Project",
-      "commandLineArgs": "--port 7282",
       "launchBrowser": false
     }
   }

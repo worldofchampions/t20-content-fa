@@ -5,18 +5,21 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using T20.Content.Models;
 
 namespace T20.Content.Functions
 {
-    public static class ContentsById_GET
+    public static class TeamPage_GET
     {
-        [FunctionName("ContentsById_GET")]
+        [FunctionName("TeamPage_GET")]
         [OpenApiOperation(
-            operationId: "ContentsById_GET",
-            tags: new[] { "contents" },
+            operationId: "TeamPage_GET",
+            tags: new[] { "teamPage" },
             Visibility = OpenApiVisibilityType.Important)]
         [OpenApiParameter(
             name: "contentType",
@@ -26,19 +29,11 @@ namespace T20.Content.Functions
             Summary = "content type",
             Required = true,
             Visibility = OpenApiVisibilityType.Important)]
-        [OpenApiParameter(
-            name: "contentTypeId",
-            In = Microsoft.OpenApi.Models.ParameterLocation.Path,
-            Type = typeof(string),
-            Description = "content type identifier",
-            Summary = "content type identifier",
-            Required = true,
-            Visibility = OpenApiVisibilityType.Important)]
         [OpenApiResponseWithBody(
             statusCode: HttpStatusCode.OK,
-            bodyType: typeof(Entity),
+            bodyType: typeof(List<TeamPageEnvelope>),
             contentType: "application/json",
-            Description = "Single Document",
+            Description = "List of Team Pages",
             Summary = "OK")]
         [OpenApiResponseWithBody(
             statusCode: HttpStatusCode.NoContent,
@@ -47,23 +42,21 @@ namespace T20.Content.Functions
             Description = "No Content",
             Summary = "")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "contents/{contentType}/{contentTypeId}")] HttpRequest req,
-            string contentType, string contentTypeId,
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "content/teamPage")] HttpRequest req,
             [CosmosDB(
                 databaseName: "%DatabaseName%",
                 collectionName: "%ContentCollectionName%",
                 ConnectionStringSetting = "CosmosDBConnectionString",
                 PreferredLocations = "%PreferredLocations%",
-                PartitionKey = "{contentType}",
-                Id = "{contentTypeId}"
+                SqlQuery = "select * from c where c.partitionKey = 'teamPage' and c.visible = true"
                 )]
-            Entity document,
+            IEnumerable<TeamPageEnvelope> documents,
             ILogger log)
         {
-            if (!(document?.Visible ?? false))
+            if (!documents.Any())
                 return new NoContentResult();
 
-            return new OkObjectResult(document);
+            return new OkObjectResult(documents);
         }
     }
 }

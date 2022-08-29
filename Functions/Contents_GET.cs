@@ -31,7 +31,7 @@ namespace T20.Content.Functions
             Visibility = OpenApiVisibilityType.Important)]
         [OpenApiResponseWithBody(
             statusCode: HttpStatusCode.OK,
-            bodyType: typeof(List<dynamic>),
+            bodyType: typeof(List<Entity>),
             contentType: "application/json",
             Description = "List of Documents",
             Summary = "OK")]
@@ -49,9 +49,9 @@ namespace T20.Content.Functions
                 collectionName: "%ContentCollectionName%",
                 ConnectionStringSetting = "CosmosDBConnectionString",
                 PreferredLocations = "%PreferredLocations%",
-                SqlQuery = "select * from c where c.partitionKey = {contentType}"
+                SqlQuery = "select * from c where c.partitionKey = {contentType} and c.visible = true"
                 )]
-            IEnumerable<dynamic> documents,
+            IEnumerable<Entity> documents,
             ILogger log)
         {
             if (!documents.Any())
