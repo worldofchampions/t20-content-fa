@@ -6,7 +6,6 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using System.Net;
-using System.Threading.Tasks;
 using T20.Content.Models;
 
 namespace T20.Content.Functions
@@ -46,7 +45,7 @@ namespace T20.Content.Functions
             contentType: "application/json",
             Description = "No Content",
             Summary = "")]
-        public static async Task<IActionResult> Run(
+        public static IActionResult Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "contents/{contentType}/{contentTypeId}")] HttpRequest req,
             string contentType, string contentTypeId,
             [CosmosDB(
