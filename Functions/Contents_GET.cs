@@ -9,7 +9,6 @@ using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using T20.Content.Models;
 
 namespace T20.Content.Functions
@@ -41,7 +40,7 @@ namespace T20.Content.Functions
             contentType: "application/json",
             Description = "No Content",
             Summary = "")]
-        public static async Task<IActionResult> Run(
+        public static IActionResult Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "contents/{contentType}")] HttpRequest req,
             string contentType,
             [CosmosDB(
